@@ -119,7 +119,51 @@ class ScimClient:
         return items
 
 
-    def update_user(self, account_id, active=True, role=None):
+    def update_user(self, account_id, active=None, role=None):
+        # Update a user's active status or role via SCIM API using PATCH
+        # PATCH is used instead of PUT to preserve existing fields like externalId
+        # Role changes require an admin setting to allow SCIM to modify user roles
+        # `role` can be one of the following: Registered, Moderator, Admin
+        # if another role is passed, it will be ignored (and still report HTTP 200)
+        # `active` can be True or False
+
+        valid_roles = ["Registered", "Moderator", "Admin"]
+
+        scim_url = f"{self.scim_url}/{account_id}"
+        
+        # Build the PATCH payload according to SCIM 2.0 specification
+        operations = []
+        
+        if active is not None:
+            operations.append({
+                "op": "replace",
+                "path": "active",
+                "value": active
+            })
+            
+        if role is not None:
+            if role in valid_roles:
+                operations.append({
+                    "op": "replace", 
+                    "path": "userType",
+                    "value": role
+                })
+            else:
+                print(f"Invalid role: {role}. Valid roles are: {valid_roles}")
+                return
+
+        payload = {
+            "schemas": ["urn:ietf:params:scim:api:messages:2.0:PatchOp"],
+            "Operations": operations
+        }
+
+        # Add User-Agent to headers
+        headers = self.headers.copy()
+        headers['User-Agent'] = 'so4t_scim_user_deletion/1.0 (http://your-app-url.com; your-contact@email.com)'
+        headers['Content-Type'] = 'application/scim+json'
+        
+        response = self.session.patch(scim_url, headers=headers, json=payload, proxies=self.proxies)
+
         # If no value is set for `active`, the user account will be deactivated
 
         scim_user_url = f"{self.scim_url}/{account_id}"
