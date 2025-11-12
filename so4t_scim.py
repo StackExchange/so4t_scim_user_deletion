@@ -32,7 +32,7 @@ class ScimClient:
         if "stackoverflowteams.com" in self.base_url: # For Basic and Business tiers
             self.soe = False
             self.scim_url = f"{self.base_url}/auth/scim/v2/users"
-        else: # For Enterprise tier
+        else: # For Enterprise tier (Stack Internal Enterprise)
             self.soe = True
             self.scim_url = f"{self.base_url}/api/scim/v2/users"
 

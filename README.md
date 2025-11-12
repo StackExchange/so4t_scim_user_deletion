@@ -1,5 +1,5 @@
-# SCIM-based User Deletion for Stack Overflow for Teams
-A Python script for Stack Overflow for Teams that uses the SCIM API to delete a list of users.
+# SCIM-based User Deletion for Stack Internal
+A Python script for Stack Internal that uses the SCIM API to delete a list of users.
 
 ## Table of Contents
 * [Requirements](https://github.com/StackExchange/so4t_scim_user_deletion?tab=readme-ov-file#requirements)
@@ -9,7 +9,7 @@ A Python script for Stack Overflow for Teams that uses the SCIM API to delete a 
 
 
 ## Requirements
-* Stack Overflow Enterprise or Business
+* Stack Internal (Enterprise) or Stack Internal (Business)
 * Python 3.8 or higher ([download](https://www.python.org/downloads/))
 * Operating system: Linux, MacOS, or Windows
 
